@@ -47,9 +47,21 @@
       margin: 10px 4px;
       padding: 5px 10px;
     }
+    /* Updated countdown style */
     #countdown {
-      font-size: 6em; /* Increased */
-      margin-top: 20px;
+      font-size: 6em;
+      position: absolute;
+      top: 40%; /* Adjust as needed */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      background: rgba(0,0,0,0.15);
+      border-radius: 24px;
+      padding: 0 40px;
+      z-index: 50;
+      opacity: 0.8;
+      pointer-events: none;
+      text-shadow: 0 2px 18px #000b;
     }
     #leaderboard {
       margin-top: 10px;
@@ -198,8 +210,10 @@
     <span id="cpuDifficultySelectors"></span>
     <button type="button" id="startButton" aria-label="Start Race">Start Race</button>
   </form>
-  <div id="countdown" aria-live="polite"></div>
-  <div id="gameArea" tabindex="0" aria-label="Game Area"></div>
+  <!-- Move countdown inside #gameArea for overlay -->
+  <div id="gameArea" tabindex="0" aria-label="Game Area">
+    <div id="countdown" aria-live="polite"></div>
+  </div>
   <div id="leaderboard" aria-live="polite"></div>
   <div id="fastestTimeDisplay"></div>
   <div id="streakDisplay"></div>
@@ -318,8 +332,7 @@
     clearGhostInterval();
     playerDots = []; speeds = []; intervals = []; shifts = []; cpuAccuracy = []; perfectStreak = []; shiftLabels = [];
     for (let i = 0; i < TOTAL_PLAYERS; i++) {
-      speeds.push(3); shifts.push(0); perfectStreak.push(0); // <-- FASTER INITIAL SPEED
-      // Assign CPU accuracy (player 0 is user, others are CPU)
+      speeds.push(3); shifts.push(0); perfectStreak.push(0);
       cpuAccuracy.push(i === 0 ? CPU_ACCURACY_BASE[0] : CPU_ACCURACY_BASE[i % CPU_ACCURACY_BASE.length] + Math.floor(Math.random() * 6));
     }
     raceEnded = false;
@@ -329,7 +342,7 @@
 
     // Game area setup
     const gameArea = document.getElementById("gameArea");
-    gameArea.innerHTML = "";
+    gameArea.innerHTML = '<div id="countdown" aria-live="polite"></div>'; // keep countdown inside gameArea
     gameArea.setAttribute('tabindex', '0');
     gameArea.focus();
     // Add finish line
@@ -373,7 +386,7 @@
     // Adjust game area height to remove extra rows
     gameArea.style.height = `${TRACK_HEIGHT * TOTAL_PLAYERS + 10}px`;
 
-    // Countdown
+    // Countdown (slowed to 1sec per number)
     let countdown = 3;
     document.getElementById("countdown").textContent = countdown;
     const countdownInterval = setInterval(() => {
@@ -387,7 +400,7 @@
       } else {
         document.getElementById("countdown").textContent = countdown;
       }
-    }, 500); // Faster countdown
+    }, 1000); // Slower, more natural countdown
   }
 
   // --- Race Start ---
