@@ -48,7 +48,7 @@
       padding: 5px 10px;
     }
     #countdown {
-      font-size: 2em;
+      font-size: 6em; /* Increased */
       margin-top: 20px;
     }
     #leaderboard {
@@ -318,7 +318,7 @@
     clearGhostInterval();
     playerDots = []; speeds = []; intervals = []; shifts = []; cpuAccuracy = []; perfectStreak = []; shiftLabels = [];
     for (let i = 0; i < TOTAL_PLAYERS; i++) {
-      speeds.push(1); shifts.push(0); perfectStreak.push(0);
+      speeds.push(3); shifts.push(0); perfectStreak.push(0); // <-- FASTER INITIAL SPEED
       // Assign CPU accuracy (player 0 is user, others are CPU)
       cpuAccuracy.push(i === 0 ? CPU_ACCURACY_BASE[0] : CPU_ACCURACY_BASE[i % CPU_ACCURACY_BASE.length] + Math.floor(Math.random() * 6));
     }
@@ -387,7 +387,7 @@
       } else {
         document.getElementById("countdown").textContent = countdown;
       }
-    }, 1000);
+    }, 500); // Faster countdown
   }
 
   // --- Race Start ---
